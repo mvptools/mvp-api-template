@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+
+  admin_db:
+    image: adminer
+    ports:
+      - 8000:8080
+
+  admin_store:
+    image: rediscommander/redis-commander
+    ports:
+      - 8081:8081
+
+  db:
+    image: mariadb
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+
+  mail:
+    image: schickling/mailcatcher
+    ports:
+      - 1080:1080
+
+  store:
+    image: redis
+
+  web:
+    build: .
+    ports:
+      - 80:80
+    volumes:
+      - .:/var/www/html
+    env_file:
+      - .env
