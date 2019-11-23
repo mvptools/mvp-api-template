@@ -39,8 +39,8 @@ type User {
 }
 
 type Query {
-    users: [User!]! @paginate(defaultCount: 10)
-    user(id: ID @eq): User @find
+    user(id: ID @eq): User! 
+        @middleware(checks: ["auth:api"]) @find
 }
 
 type Mutation {
