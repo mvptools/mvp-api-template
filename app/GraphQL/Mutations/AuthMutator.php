@@ -32,8 +32,7 @@ class AuthMutator
 
         return [
             'token' => [
-                'access_token' => $token,
-                'token_type' => 'bearer',
+                'api_token' => $token,
                 'expires_in' => Auth::factory()->getTTL(),
             ],
             'user' => Auth::user()->toArray(),
@@ -61,8 +60,7 @@ class AuthMutator
 
         return [
             'token' => [
-                'access_token' => $token,
-                'token_type' => 'bearer',
+                'api_token' => $token,
                 'expires_in' => Auth::factory()->getTTL(),
             ],
             'user' => Auth::user()->toArray(),

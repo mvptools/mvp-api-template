@@ -24,8 +24,7 @@ type Auth {
 }
 
 type Token {
-    access_token: String!
-    token_type: String!
+    api_token: String!
     expires_in: Int!
 }
 
