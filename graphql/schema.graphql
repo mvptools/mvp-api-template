@@ -39,7 +39,7 @@ type User {
 }
 
 type Query {
-    user(id: ID @eq): User! 
+    user(id: ID @eq): User
         @middleware(checks: ["auth:api"]) @find
 }
 
@@ -48,4 +48,6 @@ type Mutation {
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@signup")
     login(input: LoginInput! @spread): Auth
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@login")
+    refresh: Auth @middleware(checks: ["auth:api"])
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@refresh")
 }

@@ -66,4 +66,25 @@ class AuthMutator
             'user' => Auth::user()->toArray(),
         ];
     }
+
+    /**
+     * Login User
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @param GraphQLContext $context
+     * @return mixed
+     */ 
+    public function refresh($rootValue, array $args, GraphQLContext $context)
+    {
+        $token = Auth::refresh();
+
+        return [
+            'token' => [
+                'api_token' => $token,
+                'expires_in' => Auth::factory()->getTTL(),
+            ],
+            'user' => Auth::user()->toArray(),
+        ];
+    }
 }
