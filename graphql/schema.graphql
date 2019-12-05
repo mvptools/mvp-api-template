@@ -34,6 +34,7 @@ type User {
     last_name: String!
     email: String!
     username: String!
+    email_verified: Boolean!
     created_at: DateTime!
     updated_at: DateTime!
 }
@@ -50,4 +51,8 @@ type Mutation {
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@login")
     refresh: Auth @middleware(checks: ["auth:api"])
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@refresh")
+    verify(token: String!): Auth @middleware(checks: ["auth:api"])
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@verify")
+    resend_verify: Boolean @middleware(checks: ["auth:api"])
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@resend_verify")
 }

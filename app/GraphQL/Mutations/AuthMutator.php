@@ -4,7 +4,13 @@ namespace App\GraphQL\Mutations;
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+use App\Exceptions\AuthException;
+use App\Mail\UserCreated;
 use App\User;
 
 class AuthMutator
@@ -28,11 +34,19 @@ class AuthMutator
         ]);
 
         $user->save();
-        $token = Auth::login($user);
+
+        DB::table('email_verifications')->insert([
+            'email' => $args['email'],
+            'token' => Str::random(50),
+            'created_at' => Carbon::now(),
+            'expires_at' => Carbon::now()->addDays(2),
+        ]);
+
+        Mail::to($user->email)->send(new UserCreated($user));
 
         return [
             'token' => [
-                'api_token' => $token,
+                'api_token' => Auth::login($user),
                 'expires_in' => Auth::factory()->getTTL(),
             ],
             'user' => Auth::user()->toArray(),
@@ -77,11 +91,93 @@ class AuthMutator
      */ 
     public function refresh($rootValue, array $args, GraphQLContext $context)
     {
-        $token = Auth::refresh();
+        return [
+            'token' => [
+                'api_token' => Auth::refresh(),
+                'expires_in' => Auth::factory()->getTTL(),
+            ],
+            'user' => Auth::user()->toArray(),
+        ];
+    }
+
+    /**
+     * Resend User Verification Email
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @param GraphQLContext $context
+     * @return mixed
+     */ 
+    public function resend_verify($rootValue, array $args, GraphQLContext $context)
+    {
+        $user = Auth::user();
+
+        $email_verification = DB::table('email_verifications')
+            ->where('email', $user->email)
+            ->first();
+
+        if
+        (
+            $email_verification === null ||
+            $user->email_verified_at == true
+        )
+        {
+            throw new AuthException(
+                'Failed to resend verification email.',
+                'The user has already been verified.'
+            );
+        }
+
+        DB::table('email_verifications')
+            ->where('email', $user->email)
+            ->update([
+                'token' => Str::random(50),
+            ]);
+
+        Mail::to($user->email)->send(new UserCreated($user));
+        return true;
+    }
+
+    /**
+     * Verify User
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @param GraphQLContext $context
+     * @return mixed
+     */ 
+    public function verify($rootValue, array $args, GraphQLContext $context)
+    {
+        $user = Auth::user();
+
+        $email_verification = DB::table('email_verifications')
+            ->where('email', $user->email)
+            ->where('token', $args['token'])
+            ->first();
+
+        if
+        (
+            $email_verification === null ||
+            $email_verification->expires_at <= Carbon::now()
+        )
+        {
+            throw new AuthException(
+                'Email verification failed.',
+                'The verification token is invalid.'
+            );
+        }
+
+        DB::table('email_verifications')
+            ->where('email', $user->email)
+            ->where('token', $args['token'])
+            ->delete();
+
+        $user->email_verified_at = Carbon::now();
+        $user->save();
 
         return [
             'token' => [
-                'api_token' => $token,
+                'api_token' => Auth::refresh(),
                 'expires_in' => Auth::factory()->getTTL(),
             ],
             'user' => Auth::user()->toArray(),

@@ -21,6 +21,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'last_name',
         'email',
         'username',
+        'email_verified_at',
         'password',
     ];
 
@@ -42,6 +43,24 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Cast user to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'email' => $this->email,
+            'username' => $this->username,
+            'email_verified' => ($this->email_verified_at !== null),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
+    }
 
     /**
      * Return JWT Identifier
