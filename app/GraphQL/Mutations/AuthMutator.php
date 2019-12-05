@@ -101,44 +101,6 @@ class AuthMutator
     }
 
     /**
-     * Resend User Verification Email
-     *
-     * @param null $rootValue
-     * @param array $args
-     * @param GraphQLContext $context
-     * @return mixed
-     */ 
-    public function resend_verify($rootValue, array $args, GraphQLContext $context)
-    {
-        $user = Auth::user();
-
-        $email_verification = DB::table('email_verifications')
-            ->where('email', $user->email)
-            ->first();
-
-        if
-        (
-            $email_verification === null ||
-            $user->email_verified_at == true
-        )
-        {
-            throw new AuthException(
-                'Failed to resend verification email.',
-                'The user has already been verified.'
-            );
-        }
-
-        DB::table('email_verifications')
-            ->where('email', $user->email)
-            ->update([
-                'token' => Str::random(50),
-            ]);
-
-        Mail::to($user->email)->send(new UserCreated($user));
-        return true;
-    }
-
-    /**
      * Verify User
      *
      * @param null $rootValue
@@ -157,7 +119,7 @@ class AuthMutator
 
         if
         (
-            $email_verification === null ||
+            empty($email_verification) ||
             $email_verification->expires_at <= Carbon::now()
         )
         {
@@ -182,5 +144,37 @@ class AuthMutator
             ],
             'user' => Auth::user()->toArray(),
         ];
+    }
+
+    /**
+     * Resend User Verification Email
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @param GraphQLContext $context
+     * @return mixed
+     */ 
+    public function verifyResend($rootValue, array $args, GraphQLContext $context)
+    {
+        $user = Auth::user();
+
+        if($user->email_verified_at == true)
+        {
+            throw new AuthException(
+                'Failed to resend verification email.',
+                'The user has already been verified.'
+            );
+        }
+
+        DB::table('email_verifications')
+            ->updateOrInsert([
+                'email' => $user->email,
+                'token' => Str::random(50),
+                'created_at' => Carbon::now(),
+                'expires_at' => Carbon::now()->addDays(2),
+            ]);
+
+        Mail::to($user->email)->send(new UserCreated($user));
+        return true;
     }
 }
