@@ -37,7 +37,7 @@ class AuthMutator
 
         DB::table('email_verifications')->insert([
             'email' => $args['email'],
-            'token' => Str::random(50),
+            'token' => Str::random(75),
             'created_at' => Carbon::now(),
             'expires_at' => Carbon::now()->addDays(2),
         ]);
@@ -110,12 +110,9 @@ class AuthMutator
      */ 
     public function verify($rootValue, array $args, GraphQLContext $context)
     {
-        $user = Auth::user();
-
         $email_verification = DB::table('email_verifications')
-            ->where('email', $user->email)
             ->where('token', $args['token'])
-            ->first();
+            ->first ();
 
         if
         (
@@ -129,9 +126,12 @@ class AuthMutator
             );
         }
 
+        $user = User::where('email', $email_verification->email)
+            ->first();
+
         DB::table('email_verifications')
-            ->where('email', $user->email)
-            ->where('token', $args['token'])
+            ->where('email', $email_verification->email)
+            ->where('token', $email_verification->token)
             ->delete();
 
         $user->email_verified_at = Carbon::now();
@@ -139,10 +139,10 @@ class AuthMutator
 
         return [
             'token' => [
-                'api_token' => Auth::refresh(),
+                'api_token' => Auth::login($user),
                 'expires_in' => Auth::factory()->getTTL(),
             ],
-            'user' => Auth::user()->toArray(),
+            'user' => $user->toArray(),
         ];
     }
 
@@ -156,7 +156,20 @@ class AuthMutator
      */ 
     public function verifyResend($rootValue, array $args, GraphQLContext $context)
     {
-        $user = Auth::user();
+        $email_verification = DB::table('email_verifications')
+            ->where('token', $args['token'])
+            ->first();
+
+        if(empty($email_verification))
+        {
+            throw new AuthException(
+                'Failed to resend verification email.',
+                'Invalid email verification token.'
+            );
+        }
+
+        $user = User::where('email', $email_verification->email)
+            ->first();
 
         if($user->email_verified_at == true)
         {
@@ -167,12 +180,16 @@ class AuthMutator
         }
 
         DB::table('email_verifications')
-            ->updateOrInsert([
-                'email' => $user->email,
-                'token' => Str::random(50),
-                'created_at' => Carbon::now(),
-                'expires_at' => Carbon::now()->addDays(2),
-            ]);
+            ->updateOrInsert(
+                [
+                    'email' => $user->email,
+                ],
+                [
+                    'token' => Str::random(75),
+                    'created_at' => Carbon::now(),
+                    'expires_at' => Carbon::now()->addDays(2),
+                ],
+            );
 
         Mail::to($user->email)->send(new UserCreated($user));
         return true;

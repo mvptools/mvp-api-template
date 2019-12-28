@@ -51,8 +51,8 @@ type Mutation {
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@login")
     refresh: Auth @middleware(checks: ["auth:api"])
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@refresh")
-    verify(token: String!): Auth @middleware(checks: ["auth:api"])
+    verify(token: String!): Auth
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@verify")
-    verify_resend: Boolean @middleware(checks: ["auth:api"])
+    verify_resend(token: String!): Boolean
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@verifyResend")
 }
