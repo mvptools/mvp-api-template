@@ -156,6 +156,40 @@ class AuthMutator
      */ 
     public function verifyResend($rootValue, array $args, GraphQLContext $context)
     {
+        if(empty($args['token']))
+        {
+            if(!$user = Auth::user())
+            {
+                throw new AuthException(
+                    'Failed to resend verification email.',
+                    'Unauthorized user.'
+                );
+            }
+
+            if($user->email_verified_at == true)
+            {
+                throw new AuthException(
+                    'Failed to resend verification email.',
+                    'The user has already been verified.'
+                );
+            }
+
+            DB::table('email_verifications')
+                ->updateOrInsert(
+                    [
+                        'email' => $user->email,
+                    ],
+                    [
+                        'token' => Str::random(75),
+                        'created_at' => Carbon::now(),
+                        'expires_at' => Carbon::now()->addDays(2),
+                    ],
+                );
+
+            Mail::to($user->email)->send(new UserCreated($user));
+            return true;
+        }
+
         $email_verification = DB::table('email_verifications')
             ->where('token', $args['token'])
             ->first();
