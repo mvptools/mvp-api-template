@@ -1,6 +1,6 @@
 <div>
     <h1>Hello, {{ $user->first_name }} {{$user->last_name }}</h1>
-    <h2>Welcome to {{ config('app.name') }}</h2>
+    <h2>Welcome to {{ config('app.name') }}.</h2>
     <p>
         Click the link to verify your email. This link will expire in 2 days.
     </p>

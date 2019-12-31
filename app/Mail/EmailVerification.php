@@ -9,7 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use App\User;
 
-class UserCreated extends Mailable
+class EmailVerification extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -47,6 +47,6 @@ class UserCreated extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.users.created');
+        return $this->view('emails.users.email_verification');
     }
 }

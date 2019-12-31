@@ -18,6 +18,12 @@ input SignupInput {
     password_confirmation: String @rules(apply: ["required", "min:8", "max:255"])
 }
 
+input PasswordResetInput {
+    token: String @rules(apply: ["required", "size:75"])
+    password: String @rules(apply: ["required", "confirmed", "min:8", "max:255"])
+    password_confirmation: String @rules(apply: ["required", "min:8", "max:255"])
+}
+
 type Auth {
     token: Token!
     user: User!
@@ -51,6 +57,10 @@ type Mutation {
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@login")
     refresh: Auth @middleware(checks: ["auth:api"])
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@refresh")
+    password_reset(input: PasswordResetInput! @spread): Boolean
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@passwordReset")
+    send_password_reset(login: String!): Boolean
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@sendPasswordReset")
     verify(token: String!): Auth
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@verify")
     verify_resend(token: String): Boolean

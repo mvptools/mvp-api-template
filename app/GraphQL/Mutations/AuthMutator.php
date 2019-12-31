@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Exceptions\AuthException;
-use App\Mail\UserCreated;
+use App\Mail\EmailVerification;
+use App\Mail\PasswordReset;
 use App\User;
 
 class AuthMutator
@@ -42,7 +43,7 @@ class AuthMutator
             'expires_at' => Carbon::now()->addDays(2),
         ]);
 
-        Mail::to($user->email)->send(new UserCreated($user));
+        Mail::to($user->email)->send(new EmailVerification($user));
 
         return [
             'token' => [
@@ -101,6 +102,87 @@ class AuthMutator
     }
 
     /**
+     * Password Reset
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @param GraphQLContext $context
+     * @return mixed
+     */ 
+    public function passwordReset($rootValue, array $args, GraphQLContext $context)
+    {
+        $password_reset = DB::table('password_resets')
+            ->where('token', $args['token'])
+            ->first();
+
+        if
+        (
+            empty($password_reset) ||
+            $password_reset->expires_at <= Carbon::now()
+        )
+        {
+            throw new AuthException(
+                'Password reset failed.',
+                'The reset token is invalid or expired.'
+            );
+        }
+
+        $user = User::where('email', $password_reset->email)
+            ->first();
+
+        DB::table('password_resets')
+            ->where('email', $user->email)
+            ->where('token', $args['token'])
+            ->delete();
+
+        $user->password = Hash::make($args['password']);
+        $user->save();
+        return true;
+    }
+
+    /**
+     * Send Password Reset
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @param GraphQLContext $context
+     * @return mixed
+     */ 
+    public function sendPasswordReset($rootValue, array $args, GraphQLContext $context)
+    {
+        if($user = Auth::user())
+        {
+            throw new AuthException(
+                'Failed to reset password.',
+                'User is already authenticated.'
+            );
+        }
+
+        $user = User::where('email', $args['login'])
+            ->orWhere('username', $args['login'])
+            ->first();
+
+        if(empty($user))
+        {
+            throw new AuthException(
+                'Failed to reset password.',
+                'User does not exist.'
+            );
+        }
+
+        DB::table('password_resets')
+            ->insert([
+                'email' => $user->email,
+                'token' => Str::random(75),
+                'created_at' => Carbon::now(),
+                'expires_at' => Carbon::now()->addDays(2),
+            ]);
+
+        Mail::to($user->email)->send(new PasswordReset($user));
+        return true;
+    }
+
+    /**
      * Verify User
      *
      * @param null $rootValue
@@ -122,7 +204,7 @@ class AuthMutator
         {
             throw new AuthException(
                 'Email verification failed.',
-                'The verification token is invalid.'
+                'The verification token is invalid or expired.'
             );
         }
 
@@ -186,7 +268,7 @@ class AuthMutator
                     ],
                 );
 
-            Mail::to($user->email)->send(new UserCreated($user));
+            Mail::to($user->email)->send(new EmailVerification($user));
             return true;
         }
 
