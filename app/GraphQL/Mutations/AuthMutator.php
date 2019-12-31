@@ -136,8 +136,21 @@ class AuthMutator
             ->delete();
 
         $user->password = Hash::make($args['password']);
+
+        if($user->email_verified_at != true)
+        {
+            $user->email_verified_at = true;
+        }
+
         $user->save();
-        return true;
+        
+        return [
+            'token' => [
+                'api_token' => Auth::login($user),
+                'expires_in' => Auth::factory()->getTTL(),
+            ],
+            'user' => $user->toArray(),
+        ];
     }
 
     /**
@@ -171,12 +184,16 @@ class AuthMutator
         }
 
         DB::table('password_resets')
-            ->insert([
-                'email' => $user->email,
-                'token' => Str::random(75),
-                'created_at' => Carbon::now(),
-                'expires_at' => Carbon::now()->addDays(2),
-            ]);
+            ->updateOrInsert(
+                [
+                    'email' => $user->email,
+                ],
+                [
+                    'token' => Str::random(75),
+                    'created_at' => Carbon::now(),
+                    'expires_at' => Carbon::now()->addDays(2),
+                ]
+            );
 
         Mail::to($user->email)->send(new PasswordReset($user));
         return true;

@@ -6,8 +6,8 @@
         If you didn't request a password reset, ignore this email.
     </p>
     <p>
-        <a href="{{ config('app.frontend_url') }}/#/reset/{{ $password_token }}">
-            {{ config('app.frontend_url') }}/#/reset/{{ $password_token }}
+        <a href="{{ config('app.frontend_url') }}/#/forgot-password/{{ $password_token }}">
+            {{ config('app.frontend_url') }}/#/forgot-password/{{ $password_token }}
         </a>
     </p>
 </div>
