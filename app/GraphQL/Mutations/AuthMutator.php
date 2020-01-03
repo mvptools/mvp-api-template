@@ -137,9 +137,9 @@ class AuthMutator
 
         $user->password = Hash::make($args['password']);
 
-        if($user->email_verified_at != true)
+        if(empty($user->email_verified_at))
         {
-            $user->email_verified_at = true;
+            $user->email_verified_at = Carbon::now();
         }
 
         $user->save();
@@ -265,7 +265,7 @@ class AuthMutator
                 );
             }
 
-            if($user->email_verified_at == true)
+            if(!empty($user->email_verified_at))
             {
                 throw new AuthException(
                     'Failed to resend verification email.',
@@ -304,7 +304,7 @@ class AuthMutator
         $user = User::where('email', $email_verification->email)
             ->first();
 
-        if($user->email_verified_at == true)
+        if(!empty($user->email_verified_at))
         {
             throw new AuthException(
                 'Failed to resend verification email.',
