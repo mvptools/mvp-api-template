@@ -8,12 +8,12 @@
 - Lighthouse GraphQL
 - Tymon JWT authentication
 - Laravel CORS
-- Logging in with either email or username
+- Authentication, email verification, password reset
 
 ### Potential To-Do Items ###
 
 - Comprehensive documentation
-- Implement mutations for password reset, email confirmation, and other auth functionality.
+- Frontend form validation
 - Script for choosing between databases (MySQL, MariaDB, PostgreSQL, etc.)
 - Pre-made tests
 - Continuous integration with GitHub Actions/Gitlab CI
