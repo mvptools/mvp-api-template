@@ -13,7 +13,7 @@
 ### Potential To-Do Items ###
 
 - Comprehensive documentation
-- Frontend form validation
+- Better validation messages
 - Script for choosing between databases (MySQL, MariaDB, PostgreSQL, etc.)
 - Pre-made tests
 - Continuous integration with GitHub Actions/Gitlab CI
