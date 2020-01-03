@@ -9,6 +9,12 @@ input LoginInput {
     password: String @rules(apply: ["required", "max:255"])
 }
 
+input PasswordResetInput {
+    token: String @rules(apply: ["required", "size:75"])
+    password: String @rules(apply: ["required", "confirmed", "min:8", "max:255"])
+    password_confirmation: String @rules(apply: ["required", "min:8", "max:255"])
+}
+
 input SignupInput {
     first_name: String @rules(apply: ["required", "max:255"])
     last_name: String @rules(apply: ["required", "max:255"])
@@ -18,10 +24,10 @@ input SignupInput {
     password_confirmation: String @rules(apply: ["required", "min:8", "max:255"])
 }
 
-input PasswordResetInput {
-    token: String @rules(apply: ["required", "size:75"])
-    password: String @rules(apply: ["required", "confirmed", "min:8", "max:255"])
-    password_confirmation: String @rules(apply: ["required", "min:8", "max:255"])
+input UpdatePasswordInput {
+    old_password: String @rules(apply: ["required", "min:8", "max:255"])
+    new_password: String @rules(apply: ["required", "confirmed", "min:8", "max:255"])
+    new_password_confirmation: String @rules(apply: ["required", "min:8", "max:255"])
 }
 
 type Auth {
@@ -51,16 +57,18 @@ type Query {
 }
 
 type Mutation {
-    signup(input: SignupInput! @spread): Auth
-        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@signup")
     login(input: LoginInput! @spread): Auth
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@login")
-    refresh: Auth @middleware(checks: ["auth:api"])
-        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@refresh")
     password_reset(input: PasswordResetInput! @spread): Auth
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@passwordReset")
+    refresh: Auth @middleware(checks: ["auth:api"])
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@refresh")
     send_password_reset(login: String!): Boolean
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@sendPasswordReset")
+    signup(input: SignupInput! @spread): Auth
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@signup")
+    update_password(input: UpdatePasswordInput! @spread): Boolean @middleware(checks: ["auth:api"])
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@updatePassword")
     verify(token: String!): Auth
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@verify")
     verify_resend(token: String): Boolean

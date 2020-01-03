@@ -17,44 +17,6 @@ use App\User;
 class AuthMutator
 {
     /**
-     * Sign Up User
-     *
-     * @param null $rootValue
-     * @param array $args
-     * @param GraphQLContext $context
-     * @return mixed
-     */ 
-    public function signup($rootValue, array $args, GraphQLContext $context)
-    {
-        $user = new User([
-            'first_name' => $args['first_name'],
-            'last_name' => $args['last_name'],
-            'email' => $args['email'],
-            'username' => $args['username'],
-            'password' => Hash::make($args['password']),
-        ]);
-
-        $user->save();
-
-        DB::table('email_verifications')->insert([
-            'email' => $args['email'],
-            'token' => Str::random(75),
-            'created_at' => Carbon::now(),
-            'expires_at' => Carbon::now()->addDays(2),
-        ]);
-
-        Mail::to($user->email)->send(new EmailVerification($user));
-
-        return [
-            'token' => [
-                'api_token' => Auth::login($user),
-                'expires_in' => Auth::factory()->getTTL(),
-            ],
-            'user' => Auth::user()->toArray(),
-        ];
-    }
-
-    /**
      * Login User
      *
      * @param null $rootValue
@@ -76,25 +38,6 @@ class AuthMutator
         return [
             'token' => [
                 'api_token' => $token,
-                'expires_in' => Auth::factory()->getTTL(),
-            ],
-            'user' => Auth::user()->toArray(),
-        ];
-    }
-
-    /**
-     * Login User
-     *
-     * @param null $rootValue
-     * @param array $args
-     * @param GraphQLContext $context
-     * @return mixed
-     */ 
-    public function refresh($rootValue, array $args, GraphQLContext $context)
-    {
-        return [
-            'token' => [
-                'api_token' => Auth::refresh(),
                 'expires_in' => Auth::factory()->getTTL(),
             ],
             'user' => Auth::user()->toArray(),
@@ -154,6 +97,25 @@ class AuthMutator
     }
 
     /**
+     * Refresh Token
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @param GraphQLContext $context
+     * @return mixed
+     */ 
+    public function refresh($rootValue, array $args, GraphQLContext $context)
+    {
+        return [
+            'token' => [
+                'api_token' => Auth::refresh(),
+                'expires_in' => Auth::factory()->getTTL(),
+            ],
+            'user' => Auth::user()->toArray(),
+        ];
+    }
+
+    /**
      * Send Password Reset
      *
      * @param null $rootValue
@@ -196,6 +158,69 @@ class AuthMutator
             );
 
         Mail::to($user->email)->send(new PasswordReset($user));
+        return true;
+    }
+
+    /**
+     * Sign Up User
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @param GraphQLContext $context
+     * @return mixed
+     */ 
+    public function signup($rootValue, array $args, GraphQLContext $context)
+    {
+        $user = new User([
+            'first_name' => $args['first_name'],
+            'last_name' => $args['last_name'],
+            'email' => $args['email'],
+            'username' => $args['username'],
+            'password' => Hash::make($args['password']),
+        ]);
+
+        $user->save();
+
+        DB::table('email_verifications')->insert([
+            'email' => $args['email'],
+            'token' => Str::random(75),
+            'created_at' => Carbon::now(),
+            'expires_at' => Carbon::now()->addDays(2),
+        ]);
+
+        Mail::to($user->email)->send(new EmailVerification($user));
+
+        return [
+            'token' => [
+                'api_token' => Auth::login($user),
+                'expires_in' => Auth::factory()->getTTL(),
+            ],
+            'user' => Auth::user()->toArray(),
+        ];
+    }
+
+    /**
+     * Update Password
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @param GraphQLContext $context
+     * @return mixed
+     */ 
+    public function updatePassword($rootValue, array $args, GraphQLContext $context)
+    {
+        $user = Auth::user();
+
+        if(Hash::make($args['old_password']) == $user->password)
+        {
+            throw new AuthException(
+                'Failed to update password.',
+                'Incorrect password given.'
+            );
+        }
+
+        $user->password = Hash::make($args['new_password']);
+        $user->save();
         return true;
     }
 
