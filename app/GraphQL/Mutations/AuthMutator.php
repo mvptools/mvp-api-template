@@ -223,7 +223,7 @@ class AuthMutator
         {
             throw new AuthException(
                 'Failed to update password.',
-                'Incorrect password given.'
+                'Incorrect old password given.'
             );
         }
 
