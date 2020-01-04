@@ -5,8 +5,26 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 input LoginInput {
-    login: String @rules(apply: ["required", "max:255"])
-    password: String @rules(apply: ["required", "max:255"])
+    login: String @rules(
+        apply: [
+            "required",
+            "max:255"
+        ],
+        messages: {
+            required: "You must enter your username/email.",
+            max: "Your username/email is too long."
+        }
+    )
+    password: String @rules(
+        apply: [
+            "required",
+            "max:255"
+        ],
+        messages: {
+            required: "You must enter your password.",
+            max: "Your password is too long."
+        }
+    )
 }
 
 input PasswordResetInput {
@@ -16,18 +34,120 @@ input PasswordResetInput {
 }
 
 input SignupInput {
-    first_name: String @rules(apply: ["required", "max:255"])
-    last_name: String @rules(apply: ["required", "max:255"])
-    email: String @rules(apply: ["required", "email", "max:255"])
-    username: String @rules(apply: ["required", "max:255"])
-    password: String @rules(apply: ["required", "confirmed", "min:8", "max:255"])
-    password_confirmation: String @rules(apply: ["required", "min:8", "max:255"])
+    first_name: String @rules(
+        apply: [
+            "required",
+            "max:255"
+        ],
+        messages: {
+            required: "You must enter a first name.",
+            max: "Your first name is too long."
+        }
+    )
+    last_name: String @rules(
+        apply: [
+            "required",
+            "max:255"
+        ],
+        messages: {
+            required: "You must enter a last name.",
+            max: "Your last name is too long."
+        }
+    )
+    email: String @rules(
+        apply: [
+            "required",
+            "email",
+            "unique:users",
+            "max:255"
+        ],
+        messages: {
+            required: "You must enter a valid email address.",
+            email: "You must enter a valid email address.",
+            unique: "That email is already in use.",
+            max: "Your email address is too long."
+        }
+    )
+    username: String @rules(
+        apply: [
+            "required",
+            "unique:users",
+            "max:255"
+        ],
+        messages: {
+            required: "You must enter a username.",
+            unique: "That username is already in use.",
+            max: "Your username is too long."
+        }
+    )
+    password: String @rules(
+        apply: [
+            "required",
+            "confirmed",
+            "min:8",
+            "max:255"
+        ],
+        messages: {
+            required: "You must enter a password.",
+            confirmed: "Your passwords don't match.",
+            min: "Your password must be at least 8 characters long.",
+            min: "Your password is too long."
+        }
+    )
+    password_confirmation: String @rules(
+        apply: [
+            "required",
+            "min:8",
+            "max:255"
+        ],
+        messages: {
+            required: "You must confirm your password.",
+            confirmed: "Your passwords don't match.",
+            min: "Your passwords don't match",
+
+        }
+    )
 }
 
 input UpdatePasswordInput {
-    old_password: String @rules(apply: ["required", "min:8", "max:255"])
-    new_password: String @rules(apply: ["required", "confirmed", "min:8", "max:255"])
-    new_password_confirmation: String @rules(apply: ["required", "min:8", "max:255"])
+    old_password: String @rules(
+        apply: [
+            "required",
+            "min:8",
+            "max:255"
+        ],
+        messages: {
+            required: "You must enter your old password.",
+            min: "You must enter your old password.",
+            max: "You must enter your old password."
+        }
+    )
+    new_password: String @rules(
+        apply: [
+            "required",
+            "confirmed",
+            "min:8",
+            "max:255"
+        ],
+        messages: {
+            required: "You must enter a new password.",
+            confirmed: "Your new passwords don't match.",
+            min: "Your new password must be at least 8 characters long.",
+            min: "Your new password is too long."
+        }
+    )
+    new_password_confirmation: String @rules(
+        apply: [
+            "required",
+            "min:8",
+            "max:255"
+        ],
+        messages: {
+            required: "You must confirm your new password.",
+            confirmed: "Your new passwords don't match.",
+            min: "Your new passwords don't match",
+        }
+    )
 }
 
 type Auth {

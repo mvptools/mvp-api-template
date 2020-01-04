@@ -30,10 +30,18 @@ class AuthMutator
             ? 'email'
             : 'username';
 
-        $token = Auth::attempt([
+        $credentials = [
             $login => $args['login'],
             'password' => $args['password'],
-        ]);
+        ];
+
+        if(!$token = Auth::attempt($credentials))
+        {
+            throw new AuthException(
+                'Login failed.',
+                'Incorrect credentials.'
+            );
+        }
 
         return [
             'token' => [
