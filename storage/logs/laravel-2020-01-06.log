@@ -1,0 +1,122 @@
+[2020-01-06 19:50:03] local.ERROR: syntax error, unexpected '}', expecting ';' {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): syntax error, unexpected '}', expecting ';' at /var/www/html/app/GraphQL/Mutations/AuthMutator.php:195)
+[stacktrace]
+#0 /var/www/html/vendor/composer/ClassLoader.php(322): Composer\\Autoload\\includeFile('/var/www/html/v...')
+#1 [internal function]: Composer\\Autoload\\ClassLoader->loadClass('App\\\\GraphQL\\\\Mut...')
+#2 [internal function]: spl_autoload_call('App\\\\GraphQL\\\\Mut...')
+#3 /var/www/html/vendor/nuwave/lighthouse/src/Support/Utils.php(25): class_exists('App\\\\GraphQL\\\\Mut...')
+#4 /var/www/html/vendor/nuwave/lighthouse/src/Schema/Directives/BaseDirective.php(167): Nuwave\\Lighthouse\\Support\\Utils::namespaceClassname('App\\\\GraphQL\\\\Mut...', Array, 'class_exists')
+#5 /var/www/html/vendor/nuwave/lighthouse/src/Schema/Directives/FieldDirective.php(58): Nuwave\\Lighthouse\\Schema\\Directives\\BaseDirective->namespaceClassName('App\\\\GraphQL\\\\Mut...', Array)
+#6 /var/www/html/vendor/nuwave/lighthouse/src/Schema/Factories/FieldFactory.php(122): Nuwave\\Lighthouse\\Schema\\Directives\\FieldDirective->resolveField(Object(Nuwave\\Lighthouse\\Schema\\Values\\FieldValue))
+#7 /var/www/html/vendor/nuwave/lighthouse/src/Schema/TypeRegistry.php(315): Nuwave\\Lighthouse\\Schema\\Factories\\FieldFactory->handle(Object(Nuwave\\Lighthouse\\Schema\\Values\\FieldValue))
+#8 /var/www/html/vendor/webonyx/graphql-php/src/Type/Definition/FieldDefinition.php(90): Nuwave\\Lighthouse\\Schema\\TypeRegistry->Nuwave\\Lighthouse\\Schema\\{closure}()
+#9 /var/www/html/vendor/webonyx/graphql-php/src/Type/Definition/ObjectType.php(151): GraphQL\\Type\\Definition\\FieldDefinition::defineFieldMap(Object(GraphQL\\Type\\Definition\\ObjectType), Object(Closure))
+#10 /var/www/html/vendor/webonyx/graphql-php/src/Validator/Rules/OverlappingFieldsCanBeMerged.php(255): GraphQL\\Type\\Definition\\ObjectType->getFields()
+#11 /var/www/html/vendor/webonyx/graphql-php/src/Validator/Rules/OverlappingFieldsCanBeMerged.php(166): GraphQL\\Validator\\Rules\\OverlappingFieldsCanBeMerged->internalCollectFieldsAndFragmentNames(Object(GraphQL\\Validator\\ValidationContext), Object(GraphQL\\Type\\Definition\\ObjectType), Object(GraphQL\\Language\\AST\\SelectionSetNode), Array, Array)
+#12 /var/www/html/vendor/webonyx/graphql-php/src/Validator/Rules/OverlappingFieldsCanBeMerged.php(97): GraphQL\\Validator\\Rules\\OverlappingFieldsCanBeMerged->getFieldsAndFragmentNames(Object(GraphQL\\Validator\\ValidationContext), Object(GraphQL\\Type\\Definition\\ObjectType), Object(GraphQL\\Language\\AST\\SelectionSetNode))
+#13 /var/www/html/vendor/webonyx/graphql-php/src/Validator/Rules/OverlappingFieldsCanBeMerged.php(65): GraphQL\\Validator\\Rules\\OverlappingFieldsCanBeMerged->findConflictsWithinSelectionSet(Object(GraphQL\\Validator\\ValidationContext), Object(GraphQL\\Type\\Definition\\ObjectType), Object(GraphQL\\Language\\AST\\SelectionSetNode))
+#14 /var/www/html/vendor/webonyx/graphql-php/src/Language/Visitor.php(410): GraphQL\\Validator\\Rules\\OverlappingFieldsCanBeMerged->GraphQL\\Validator\\Rules\\{closure}(Object(GraphQL\\Language\\AST\\SelectionSetNode), 'selectionSet', Object(GraphQL\\Language\\AST\\OperationDefinitionNode), Array, Array)
+#15 /var/www/html/vendor/webonyx/graphql-php/src/Language/Visitor.php(466): GraphQL\\Language\\Visitor::GraphQL\\Language\\{closure}(Object(GraphQL\\Language\\AST\\SelectionSetNode), 'selectionSet', Object(GraphQL\\Language\\AST\\OperationDefinitionNode), Array, Array)
+#16 /var/www/html/vendor/webonyx/graphql-php/src/Language/Visitor.php(273): GraphQL\\Language\\Visitor::GraphQL\\Language\\{closure}(Object(GraphQL\\Language\\AST\\SelectionSetNode), 'selectionSet', Object(GraphQL\\Language\\AST\\OperationDefinitionNode), Array, Array)
+#17 /var/www/html/vendor/webonyx/graphql-php/src/Validator/DocumentValidator.php(226): GraphQL\\Language\\Visitor::visit(Object(GraphQL\\Language\\AST\\DocumentNode), Array)
+#18 /var/www/html/vendor/webonyx/graphql-php/src/Validator/DocumentValidator.php(118): GraphQL\\Validator\\DocumentValidator::visitUsingRules(Object(GraphQL\\Type\\Schema), Object(GraphQL\\Utils\\TypeInfo), Object(GraphQL\\Language\\AST\\DocumentNode), Array)
+#19 /var/www/html/vendor/webonyx/graphql-php/src/GraphQL.php(149): GraphQL\\Validator\\DocumentValidator::validate(Object(GraphQL\\Type\\Schema), Object(GraphQL\\Language\\AST\\DocumentNode), Array)
+#20 /var/www/html/vendor/webonyx/graphql-php/src/GraphQL.php(90): GraphQL\\GraphQL::promiseToExecute(Object(GraphQL\\Executor\\Promise\\Adapter\\SyncPromiseAdapter), Object(GraphQL\\Type\\Schema), 'mutation {\
+  si...', NULL, Object(Nuwave\\Lighthouse\\Schema\\Context), Array, NULL, NULL, Array)
+#21 /var/www/html/vendor/nuwave/lighthouse/src/GraphQL.php(171): GraphQL\\GraphQL::executeQuery(Object(GraphQL\\Type\\Schema), 'mutation {\
+  si...', NULL, Object(Nuwave\\Lighthouse\\Schema\\Context), Array, NULL, NULL, Array)
+#22 /var/www/html/vendor/nuwave/lighthouse/src/GraphQL.php(110): Nuwave\\Lighthouse\\GraphQL->executeQuery('mutation {\
+  si...', Object(Nuwave\\Lighthouse\\Schema\\Context), Array, NULL, NULL)
+#23 /var/www/html/vendor/nuwave/lighthouse/src/Support/Http/Controllers/GraphQLController.php(70): Nuwave\\Lighthouse\\GraphQL->executeRequest(Object(Nuwave\\Lighthouse\\Execution\\LighthouseRequest))
+#24 [internal function]: Nuwave\\Lighthouse\\Support\\Http\\Controllers\\GraphQLController->query(Object(Nuwave\\Lighthouse\\Execution\\LighthouseRequest))
+#25 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): call_user_func_array(Array, Array)
+#26 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\\Routing\\Controller->callAction('query', Array)
+#27 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Route.php(219): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Nuwave\\Lighthouse\\Support\\Http\\Controllers\\GraphQLController), 'query')
+#28 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Route.php(176): Illuminate\\Routing\\Route->runController()
+#29 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(681): Illuminate\\Routing\\Route->run()
+#30 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(130): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#31 /var/www/html/vendor/nuwave/lighthouse/src/Support/Http/Middleware/AcceptJson.php(30): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(171): Nuwave\\Lighthouse\\Support\\Http\\Middleware\\AcceptJson->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(105): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(683): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#35 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(658): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#36 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(624): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#37 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(613): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#38 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(170): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#39 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(130): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#40 /var/www/html/vendor/barryvdh/laravel-cors/src/HandleCors.php(36): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(171): Barryvdh\\Cors\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(171): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(171): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(171): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(171): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 /var/www/html/vendor/fideloper/proxy/src/TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(171): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(105): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(145): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#54 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#55 /var/www/html/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#56 {main}
+"} 
+[2020-01-06 20:03:29] local.ERROR: There are no commands defined in the "lighthouse-cache" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"lighthouse-cache\" namespace. at /var/www/html/vendor/symfony/console/Application.php:598)
+[stacktrace]
+#0 /var/www/html/vendor/symfony/console/Application.php(651): Symfony\\Component\\Console\\Application->findNamespace('lighthouse-cach...')
+#1 /var/www/html/vendor/symfony/console/Application.php(236): Symfony\\Component\\Console\\Application->find('lighthouse-cach...')
+#2 /var/www/html/vendor/symfony/console/Application.php(148): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 /var/www/html/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(131): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#5 /var/www/html/artisan(36): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2020-01-06 20:03:36] local.ERROR: There are no commands defined in the "lighthousecache" namespace.
+
+Did you mean this?
+    lighthouse {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"lighthousecache\" namespace.
+
+Did you mean this?
+    lighthouse at /var/www/html/vendor/symfony/console/Application.php:598)
+[stacktrace]
+#0 /var/www/html/vendor/symfony/console/Application.php(651): Symfony\\Component\\Console\\Application->findNamespace('lighthousecache')
+#1 /var/www/html/vendor/symfony/console/Application.php(236): Symfony\\Component\\Console\\Application->find('lighthousecache...')
+#2 /var/www/html/vendor/symfony/console/Application.php(148): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 /var/www/html/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(131): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#5 /var/www/html/artisan(36): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2020-01-06 20:03:40] local.ERROR: Command "lighthouse" is not defined.
+
+Did you mean one of these?
+    lighthouse:clear-cache
+    lighthouse:ide-helper
+    lighthouse:interface
+    lighthouse:mutation
+    lighthouse:print-schema
+    lighthouse:query
+    lighthouse:scalar
+    lighthouse:subscription
+    lighthouse:union
+    lighthouse:validate-schema {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"lighthouse\" is not defined.
+
+Did you mean one of these?
+    lighthouse:clear-cache
+    lighthouse:ide-helper
+    lighthouse:interface
+    lighthouse:mutation
+    lighthouse:print-schema
+    lighthouse:query
+    lighthouse:scalar
+    lighthouse:subscription
+    lighthouse:union
+    lighthouse:validate-schema at /var/www/html/vendor/symfony/console/Application.php:670)
+[stacktrace]
+#0 /var/www/html/vendor/symfony/console/Application.php(236): Symfony\\Component\\Console\\Application->find('lighthouse')
+#1 /var/www/html/vendor/symfony/console/Application.php(148): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#2 /var/www/html/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(131): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 /var/www/html/artisan(36): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#5 {main}
+"} 

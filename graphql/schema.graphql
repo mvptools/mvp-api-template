@@ -28,9 +28,42 @@ input LoginInput {
 }
 
 input PasswordResetInput {
-    token: String @rules(apply: ["required", "size:75"])
-    password: String @rules(apply: ["required", "confirmed", "min:8", "max:255"])
-    password_confirmation: String @rules(apply: ["required", "min:8", "max:255"])
+    token: String @rules(
+        apply: [
+            "required",
+            "size:75"
+        ],
+        messages: {
+            required: "Invalid token.",
+            size: "Invalid token."
+        }
+    )
+    password: String @rules(
+        apply: [
+            "required",
+            "confirmed",
+            "min:8",
+            "max:255"
+        ],
+        messages: {
+            required: "You must enter a new password.",
+            confirmed: "Your passwords don't match.",
+            min: "Your password must be at least 8 characters long.",
+            max: "Your password is too long."
+        }
+    )
+    password_confirmation: String @rules(
+        apply: [
+            "required",
+            "min:8",
+            "max:255"
+        ],
+        messages: {
+            required: "You must confirm your password.",
+            min: "Your passwords don't match.",
+            max: "Your passwords don't match."
+        }
+    )
 }
 
 input SignupInput {
@@ -58,7 +91,7 @@ input SignupInput {
         apply: [
             "required",
             "email",
-            "unique:users",
+            "unique:users,email",
             "max:255"
         ],
         messages: {
@@ -71,7 +104,7 @@ input SignupInput {
     username: String @rules(
         apply: [
             "required",
-            "unique:users",
+            "unique:users,username",
             "max:255"
         ],
         messages: {
@@ -103,8 +136,8 @@ input SignupInput {
         messages: {
             required: "You must confirm your password.",
             confirmed: "Your passwords don't match.",
-            min: "Your passwords don't match",
-
+            min: "Your passwords don't match.",
+            max: "Your passwords don't match."
         }
     )
 }
