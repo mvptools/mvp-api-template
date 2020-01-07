@@ -115,11 +115,8 @@ class AuthMutator
     public function refresh($rootValue, array $args, GraphQLContext $context)
     {
         return [
-            'token' => [
-                'api_token' => Auth::refresh(),
-                'expires_in' => Auth::factory()->getTTL(),
-            ],
-            'user' => Auth::user()->toArray(),
+            'api_token' => Auth::refresh(),
+            'expires_in' => Auth::factory()->getTTL(),
         ];
     }
 

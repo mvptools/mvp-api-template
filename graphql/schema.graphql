@@ -214,7 +214,7 @@ type Mutation {
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@login")
     password_reset(input: PasswordResetInput! @spread): Auth
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@passwordReset")
-    refresh: Auth @middleware(checks: ["auth:api"])
+    refresh: Token
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@refresh")
     send_password_reset(login: String!): Boolean
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutator@sendPasswordReset")
