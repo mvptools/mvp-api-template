@@ -9,11 +9,11 @@
 - Tymon JWT authentication
 - Laravel CORS
 - Authentication, email verification, password reset
+- Server side input validation messages
 
 ### Potential To-Do Items ###
 
 - Comprehensive documentation
-- Better validation messages
 - Script for choosing between databases (MySQL, MariaDB, PostgreSQL, etc.)
 - Pre-made tests
 - Continuous integration with GitHub Actions/Gitlab CI
